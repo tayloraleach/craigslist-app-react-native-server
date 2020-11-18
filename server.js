@@ -76,6 +76,8 @@ app.get('/search', async (request, response) => {
     searchTitlesOnly,
     hasImages,
     ownerType,
+    minPrice,
+    maxPrice,
   } = request.query
   let ownerOrDealer = 'sss'
   if (ownerType === 'Dealer') {
@@ -94,6 +96,15 @@ app.get('/search', async (request, response) => {
   if (hasImages === 'true') {
     url += '&hasPic=1'
   }
+  if (minPrice) {
+    url += `&min_price=${minPrice}`
+  }
+  if (maxPrice) {
+    url += `&max_price=${maxPrice}`
+  }
+
+  console.log(encodeURI(url), '======', request.query)
+
   const results = await getResults(encodeURI(url))
   response.json(results)
 })
