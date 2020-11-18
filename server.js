@@ -25,6 +25,7 @@ async function getResults (url) {
   rows.each((index, element) => {
     const result = $(element)
     const title = result.find('.result-title').text()
+    const id = result.attr('data-pid')
     const price = $(result.find('.result-price').get(0)).text()
     const imageData = result.find('a.result-image').attr('data-ids')
     let images = []
@@ -48,6 +49,7 @@ async function getResults (url) {
 
     results.push({
       title,
+      id,
       price,
       images,
       hood,
@@ -66,10 +68,33 @@ app.get('/', (request, response) => {
   })
 })
 
-app.get('/search/:location/:search_term', async (request, response) => {
-  const {location, search_term} = request.params
-  const url = `https://${location}.craigslist.org/search/sss?sort=date&query=${search_term}`
-  const results = await getResults(url)
+app.get('/search', async (request, response) => {
+  const {
+    location,
+    searchTerm,
+    postedToday,
+    searchTitlesOnly,
+    hasImages,
+    ownerType,
+  } = request.query
+  let ownerOrDealer = 'sss'
+  if (ownerType === 'Dealer') {
+    ownerOrDealer = 'ssq'
+  }
+  if (ownerType === 'Owner') {
+    ownerOrDealer = 'sso'
+  }
+  let url = `https://${location}.craigslist.org/search/${ownerOrDealer}?sort=date&query=${searchTerm}`
+  if (postedToday === 'true') {
+    url += '&postedToday=1'
+  }
+  if (searchTitlesOnly === 'true') {
+    url += '&srchType=T'
+  }
+  if (hasImages === 'true') {
+    url += '&hasPic=1'
+  }
+  const results = await getResults(encodeURI(url))
   response.json(results)
 })
 
