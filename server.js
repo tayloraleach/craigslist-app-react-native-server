@@ -35,19 +35,11 @@ app.get('/search', async (request, response) => {
     postedToday,
     searchTitlesOnly,
     hasImages,
-    category,
-    ownerType,
+    categoryCode,
     minPrice,
     maxPrice,
   } = request.query
-  let ownerOrDealer = 'sss'
-  if (ownerType === 'Dealer') {
-    ownerOrDealer = 'ssq'
-  }
-  if (ownerType === 'Owner') {
-    ownerOrDealer = 'sso'
-  }
-  let url = `https://${location}.craigslist.org/search/${ownerOrDealer}?sort=date&query=${searchTerm}`
+  let url = `https://${location}.craigslist.org/search/${categoryCode}?sort=date&query=${searchTerm}`
   if (postedToday === 'true') {
     url += '&postedToday=1'
   }
