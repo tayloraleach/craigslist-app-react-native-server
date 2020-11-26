@@ -20,6 +20,7 @@ async function getResults (url) {
     const price = $(result.find('.result-price').get(0)).text()
     const imageData = result.find('a.result-image').attr('data-ids')
     const datePosted = $(result.find('.result-date')).attr('datetime')
+    const isOutOfArea = $(result.find('.nearby')).attr('title')
     let images = []
     if (imageData) {
       const parts = imageData.split(',')
@@ -46,6 +47,7 @@ async function getResults (url) {
       images,
       hood,
       url,
+      isOutOfArea,
       datePosted
     })
   })
