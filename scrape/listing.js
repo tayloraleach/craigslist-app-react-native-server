@@ -2,7 +2,6 @@ const cheerio = require('cheerio')
 const puppeteer = require('puppeteer')
 
 async function getListing (url) {
-
   const browser = await puppeteer.launch({headless: true})
   const page = await browser.newPage()
   await page.goto(url)
@@ -10,47 +9,22 @@ async function getListing (url) {
   const content = await page.content()
 
   const $ = cheerio.load(content)
-    const contentBody = $('#postingbody').html();
+  const contentBody = $('#postingbody').html()
 
-  //   rows.each((index, element) => {
-  //     const result = $(element)
-  //     const title = result.find('.result-title').text()
-  //     const id = result.attr('data-pid')
-  //     const price = $(result.find('.result-price').get(0)).text()
-  //     const imageData = result.find('a.result-image').attr('data-ids')
-  //     let images = []
-  //     if (imageData) {
-  //       const parts = imageData.split(',')
-  //       images = parts.map(id => {
-  //         return `https://images.craigslist.org/${id.split(':')[1]}_300x300.jpg`
-  //       })
-  //     }
+  let schema = null
+  try {
+    schema = $('#ld_posting_data').html()
+  } catch (e) {
+    console.log(e)
+  }
 
-  //     let hood = result.find('.result-hood').text()
+  console.log(schema, '===')
 
-  //     if (hood) {
-  //       // javascript truthy, falsy
-  //       hood = hood.match(/\((.*)\)/)[1]
-  //       //.trim().replace("(", "").replace(")", "");
-  //     }
-
-  //     // .result-title.hdrlnk
-  //     let url = result.find('.result-title.hdrlnk').attr('href')
-
-  //     results.push({
-  //       title,
-  //       id,
-  //       price,
-  //       images,
-  //       hood,
-  //       url,
-  //     })
-  //   })
-
-  await browser.close()
+//   await browser.close()
 
   return {
-    contentBody
+    contentBody,
+    schema,
   }
 }
 
