@@ -1,8 +1,9 @@
 const cheerio = require('cheerio')
 const puppeteer = require('puppeteer')
+const { PUPPETEER_ARGS } = require('./args')
 
 async function getListing (url) {
-  const browser = await puppeteer.launch({headless: true})
+  const browser = await puppeteer.launch(PUPPETEER_ARGS)
   const page = await browser.newPage()
   await page.goto(url)
 
